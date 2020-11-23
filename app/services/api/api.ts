@@ -47,6 +47,46 @@ export class Api {
   /**
    * Gets a list of users.
    */
+  async getAstroidrDetails(id : string): Promise<Types.GetAstroidResults> {
+    // make the api call
+   
+    const response: ApiResponse<any> = await this.apisauce.get(`https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=FkJwiMwd3m1bMhTd1E7bKtIao94NEH9mFE5tByI8`)
+    
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    try {
+      
+      return { kind: "ok", astroid : response.data}
+    } catch(e) {
+      __DEV__ && console.tron.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async getAll(): Promise<Types.GetAllAstroidResults> {
+    // make the api call
+   
+    const response: ApiResponse<any> = await this.apisauce.get(`https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=DEMO_KEY`)
+    
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    try {
+      
+      return { kind: "ok", allastroid : response.data.near_earth_objects}
+    } catch(e) {
+      __DEV__ && console.tron.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
   async getUsers(): Promise<Types.GetUsersResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.get(`/users`)

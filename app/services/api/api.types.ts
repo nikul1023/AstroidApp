@@ -7,3 +7,5 @@ export interface User {
 
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
+export type GetAstroidResults = { kind: "ok"; astroid : any} | GeneralApiProblem
+export type GetAllAstroidResults = { kind: "ok"; allastroid : any} | GeneralApiProblem
