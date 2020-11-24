@@ -1,8 +1,8 @@
 import React,{useState} from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle ,TouchableOpacity,TextInput,StyleSheet,Alert,View} from "react-native"
+import { ViewStyle ,ActivityIndicator,TouchableOpacity,TextInput,StyleSheet,Alert,View} from "react-native"
 import { Screen, Text } from "../../components"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
  import { useStores } from "../../models"
 import { color,spacing,typography } from "../../theme"
 
@@ -11,6 +11,7 @@ export const SearchScreen = observer(function SearchScreen() {
   // Pull in one of our MST stores
    const { astroidStore } = useStores()
    const [isValid,setIsValid] = useState(false);
+   const [loading,setLoading] = useState(false);
    const [astroidId,setAstroidId] = useState<string>('');
    const navigation = useNavigation();
   // OR
@@ -39,10 +40,12 @@ export const SearchScreen = observer(function SearchScreen() {
  }
 
  async function randomAstroid()  {
- 
+    setLoading(true);
    await astroidStore.getRandomAstroid();
-
-    navigation.push('details');
+   setAstroidId(astroidStore.random.id);
+   setIsValid(true);
+   setLoading(false);
+    //navigation.push('details');
 
 }
 
@@ -59,6 +62,8 @@ export const SearchScreen = observer(function SearchScreen() {
   // const navigation = useNavigation()
   return (
     <View style={styles.ROOT} >
+      {loading ? ( <ActivityIndicator />) :
+      <>
       <Text style={styles.NAME}>Astroid App</Text>
      
       <TextInput 
@@ -71,13 +76,14 @@ export const SearchScreen = observer(function SearchScreen() {
                    
                 />
               
-                <TouchableOpacity onPress={()=>{handleSearch(astroidId)}} style={styles.SEARCH_BUTTON}>
+                <TouchableOpacity disabled={!isValid} onPress={()=>{handleSearch(astroidId)}} style={styles.SEARCH_BUTTON}>
                   <Text style={styles.BUTTON_TEXT}>Search</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>{randomAstroid()}} style={styles.SEARCH_BUTTON}>
                   <Text style={styles.BUTTON_TEXT}>Random Astroid</Text>
                 </TouchableOpacity>
-
+                </>
+}
     </View>
   )
 })

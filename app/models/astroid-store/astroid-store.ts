@@ -11,7 +11,7 @@ export const AstroidStoreModel = types
   .model("AstroidStore")
   .props({
     astroid :  types.optional(types.frozen(), null),
-   
+    random :  types.optional(types.frozen(), null),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
@@ -30,7 +30,7 @@ export const AstroidStoreModel = types
     const result =yield api.getAll();
     
     if(result.kind === "ok") {
-       self.astroid = result.allastroid[Math.floor(Math.random()*result.allastroid.length)];
+       self.random = result.allastroid[Math.floor(Math.random()*result.allastroid.length)];
     } else {
      __DEV__ && console.tron.log(result.kind)
     }
